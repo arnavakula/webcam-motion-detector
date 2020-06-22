@@ -1,10 +1,12 @@
-import cv2, time
+import cv2, time, pandas, numpy
 from datetime import datetime
 
 video = cv2.VideoCapture(0)
 first_frame = None
 status_list = [None, None]
 change_list = []
+data = pandas.DataFrame(columns = ['start', 'end'])
+
 video.read()
 time.sleep(2) #so the camera can properly register first_frame
 
@@ -36,7 +38,7 @@ while True:
 
     status_list.append(status)
     if status_list[-1] == 1 and status_list[-2] == 0:
-        change_list.append(datetime.now)
+        change_list.append(datetime.now())
     elif status_list[-1] == 0 and status_list[-2] == 1:
         change_list.append(datetime.now())
 
@@ -55,6 +57,11 @@ while True:
         break
 
 print(change_list)
+
+for i in range(0, len(change_list), 2):
+    data = data.append({'start': change_list[i], 'end':change_list[i + 1]}, ignore_index = True)
+
+data.to_csv('motion-times.csv')
 
 video.release()
 cv2.destroyAllWindows()
