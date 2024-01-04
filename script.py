@@ -49,9 +49,8 @@ while True:
     cv2.imshow('Threshold', tf)
     cv2.imshow('Color frame', frame)
 
-    key = cv2.waitKey(1)
 
-    if key == ord('q'):
+    if (key := cv2.waitKey(1)) == ord('q'):
         if status == 1: 
             change_list.append(datetime.now())
         break
